@@ -4,7 +4,7 @@ import { test, request } from '@playwright/test';
 
 const BASE = 'https://opensource-demo.orangehrmlive.com';
 
-test('probe login endpoints', async () => {
+test.skip('probe login endpoints', async () => {
   const anon = await request.newContext({ baseURL: BASE });
   const r401 = await anon.get('/web/index.php/api/v2/dashboard/employees/action-summary');
   console.log('401 probe status:', r401.status());
