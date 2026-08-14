@@ -37,6 +37,25 @@ API_BASE_URL=https://opensource-demo.orangehrmlive.com/web/index.php/api
   the pattern strictly — if this suite is ever pointed at a real instance,
   the credential handling should already be correct.
 
+## API Testing Prerequisite: OAuth Client Registration
+OrangeHRM's public v2 REST API authenticates via OAuth 2.0
+(`client_id`/`client_secret` → bearer access token), not via the
+username/password used by the web login form. There is no documented
+REST "login" endpoint — the web UI's login call is internal and
+undocumented, so **Login has no `api`-type scenarios; it's `ui` only.**
+
+For any other feature's `api`-type scenarios (e.g. Add Employee via API),
+an OAuth client must be registered once, manually, via the web UI at
+**Admin > Configuration > Register OAuth Client**, before test-generator
+can authenticate API calls. This is a one-time manual setup step, not
+something the agents can do themselves through Playwright MCP (it requires
+a human to create and store the client_id/secret). Once created, add the
+resulting credentials to `.env`:
+OAUTH_CLIENT_ID=<value>
+OAUTH_CLIENT_SECRET=<value>
+OAUTH_CLIENT_ID=<value>
+OAUTH_CLIENT_SECRET=<value>
+
 ## Agent Pipeline
 This project is driven by three Claude Code subagents defined in
 `.claude/agents/`. Invoke them in order:

@@ -1,0 +1,155 @@
+{
+  "feature": "login",
+  "sourceRequirement": "requirements/login.md",
+  "createdAt": "2026-08-14T17:05:00.000Z",
+  "revisedAt": "2026-08-14T00:00:00.000Z",
+  "revisionNote": "Revision 2 (2026-08-14) — correction pass, no re-exploration. Removed all three api-type scenarios (login-api-valid-credentials, login-api-invalid-credentials, login-api-unauthenticated-401) per CLAUDE.md > 'API Testing Prerequisite: OAuth Client Registration', which states OrangeHRM's v2 REST API authenticates via OAuth 2.0 client_id/client_secret and has no documented REST login endpoint, so Login is ui-only. coverageCheck re-pointed at the surviving ui scenarios; api-only assumptions (CSRF token, api-layer override) dropped; .env assumption corrected; api layer recorded under outOfScope. The 4 ui scenarios are unchanged and remain grounded in the original exploredAt session.",
+  "exploredAt": "2026-08-14T17:03:00.000Z",
+  "coverageCheck": [
+    {
+      "criterion": "Entering a valid Username and Password and clicking Login navigates the user to the Dashboard.",
+      "coveredBy": "login-valid-credentials-dashboard"
+    },
+    {
+      "criterion": "Entering an invalid Username/Password combination shows an error message and does not navigate away from the login page.",
+      "coveredBy": "login-invalid-credentials-error"
+    },
+    {
+      "criterion": "Submitting the login form with Username or Password left blank shows a validation message and does not attempt to log in.",
+      "coveredBy": "login-required-field-validation"
+    },
+    {
+      "criterion": "Test Data: Valid credentials come from ADMIN_USERNAME / ADMIN_PASSWORD in .env (Admin / admin123 on the demo instance).",
+      "coveredBy": "login-valid-credentials-dashboard, login-required-field-validation — both read credentials from env placeholders ({{env.ADMIN_USERNAME}} / {{env.ADMIN_PASSWORD}}), never inline literals"
+    },
+    {
+      "criterion": "Test Data: Invalid credentials use a clearly bogus random value, not a real-looking wrong password.",
+      "coveredBy": "login-invalid-credentials-error — uses {{randomBogusUsername}} / {{randomBogusPassword}}"
+    },
+    {
+      "criterion": "Out of scope: Forgot your password? flow",
+      "coveredBy": "EXCLUDED — see outOfScope[0]. Link confirmed present on live page but deliberately not exercised."
+    },
+    {
+      "criterion": "Out of scope: Remember-me / session persistence",
+      "coveredBy": "EXCLUDED — see outOfScope[1]. No remember-me control exists on the live login form (confirmed via snapshot)."
+    },
+    {
+      "criterion": "Out of scope: Account lockout after repeated failed attempts",
+      "coveredBy": "EXCLUDED — see outOfScope[2]. Not probed; repeated failures during exploration produced only 'Invalid credentials', no lockout observed."
+    },
+    {
+      "criterion": "Type: ui only (no api-type scenarios for Login).",
+      "coveredBy": "All 4 scenarios in this plan are type 'ui'. The api layer of login is EXCLUDED — see outOfScope[7] and assumptions[0]."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "login-valid-credentials-dashboard",
+      "title": "User with valid credentials logs in and reaches the Dashboard",
+      "type": "ui",
+      "priority": "critical",
+      "tags": ["@smoke", "@functional"],
+      "preconditions": [
+        "Unauthenticated browser context — this spec must NOT reuse the shared storageState from the 'setup' project (see assumptions)",
+        "On /web/index.php/auth/login"
+      ],
+      "steps": [
+        "Navigate to the base URL",
+        "Enter the valid username in the Username field",
+        "Enter the valid password in the Password field",
+        "Click Login"
+      ],
+      "expectedResult": "Browser lands on /web/index.php/dashboard/index and the Dashboard header heading (level 6, accessible name \"Dashboard\") is visible",
+      "observedNotes": "Confirmed live 2026-08-14: base URL redirects to /web/index.php/auth/login. Form exposes textbox 'Username' (input[name=\"username\"]) and textbox 'Password' (input[name=\"password\"]) plus button 'Login' (button[type=\"submit\"]); getByRole('textbox', { name: 'Username' }) / getByRole('button', { name: 'Login' }) both resolved. After submitting Admin/admin123: POST /web/index.php/auth/validate => 302, then GET /web/index.php/dashboard/index => 200. Landed page has heading 'Dashboard' [level=6] in the banner, sidebar navigation 'Sidepanel', and topbar navigation 'Topbar Menu'. No functional console errors (only a favicon 404).",
+      "testData": {
+        "username": "{{env.ADMIN_USERNAME}}",
+        "password": "{{env.ADMIN_PASSWORD}}"
+      },
+      "riskRationale": "The single highest-risk path in the app — if login fails, every other module is unreachable and the entire suite is blocked."
+    },
+    {
+      "id": "login-invalid-credentials-error",
+      "title": "Invalid credentials are rejected with \"Invalid credentials\" and the user stays on the login page",
+      "type": "ui",
+      "priority": "critical",
+      "tags": ["@smoke", "@functional", "@regression"],
+      "preconditions": [
+        "Unauthenticated browser context",
+        "On /web/index.php/auth/login"
+      ],
+      "steps": [
+        "Navigate to the base URL",
+        "Enter a bogus username",
+        "Enter a bogus password",
+        "Click Login"
+      ],
+      "expectedResult": "An alert containing the exact text \"Invalid credentials\" is visible, the URL is still /web/index.php/auth/login, and the Dashboard is not reached",
+      "observedNotes": "Confirmed live 2026-08-14 with username 'zz_bogus_user_9x7q' / password 'zz_bogus_pass_9x7q': a node with role=alert appears above the form containing paragraph text exactly 'Invalid credentials' (no trailing period, capital I only). URL stayed /web/index.php/auth/login. Network showed POST /auth/validate => 302 followed by GET /auth/login => 200, i.e. the server round-trips and re-renders login. Both Username and Password fields are cleared after the failed attempt.",
+      "testData": {
+        "username": "{{randomBogusUsername}}",
+        "password": "{{randomBogusPassword}}"
+      },
+      "riskRationale": "Security boundary — if invalid credentials were ever accepted, unauthorized access to all HR data follows. Also the most common real-world failure path (typos)."
+    },
+    {
+      "id": "login-required-field-validation",
+      "title": "Submitting with Username and/or Password blank shows inline \"Required\" and no login is attempted",
+      "type": "ui",
+      "priority": "major",
+      "tags": ["@functional", "@regression"],
+      "preconditions": [
+        "Unauthenticated browser context",
+        "On /web/index.php/auth/login"
+      ],
+      "steps": [
+        "Click Login with both fields empty",
+        "Observe the inline validation under each field",
+        "Enter only a username, leave Password blank, click Login",
+        "Observe the inline validation under Password"
+      ],
+      "expectedResult": "With both fields empty, the exact text \"Required\" appears inline beneath both Username and Password; with only Username filled, \"Required\" appears beneath Password only. In both cases the URL stays /web/index.php/auth/login and no POST to /auth/validate is made",
+      "observedNotes": "Confirmed live 2026-08-14: empty submit renders a sibling node with text exactly 'Required' under each of the two fields — inline, not a toast, and no role=alert wrapper. Network list after empty submit contained no POST to /auth/validate (only a GET /core/i18n/messages), proving validation is client-side and blocks submission. With Username='Admin' and Password blank, only the Password field showed 'Required'.",
+      "testData": {
+        "username": "{{env.ADMIN_USERNAME}}"
+      },
+      "riskRationale": "Commonly-hit validation path; a regression here either lets empty credentials hit the server or blocks legitimate users with a broken form state."
+    },
+    {
+      "id": "login-unauthenticated-page-guard",
+      "title": "Unauthenticated access to a protected page redirects to the login page",
+      "type": "ui",
+      "priority": "major",
+      "tags": ["@functional", "@integration", "@regression"],
+      "preconditions": [
+        "Unauthenticated browser context (no session cookie)"
+      ],
+      "steps": [
+        "Navigate directly to /web/index.php/dashboard/index without logging in"
+      ],
+      "expectedResult": "Browser is redirected to /web/index.php/auth/login and the heading \"Login\" (level 5) is visible; no Dashboard content renders",
+      "observedNotes": "Confirmed live 2026-08-14: after clicking Logout (menuitem 'Logout' under the topbar profile dropdown), a direct navigation to /web/index.php/dashboard/index landed on /web/index.php/auth/login. Login page heading is 'Login' [level=5]. Logout itself also redirects to /auth/login.",
+      "testData": {},
+      "riskRationale": "Auth-guard enforcement — if this breaks, protected HR pages are reachable without authenticating, which is a security defect rather than a cosmetic one."
+    }
+  ],
+  "assumptions": [
+    "This plan is deliberately ui-only, matching the requirements file's ## Type. Per CLAUDE.md > 'API Testing Prerequisite: OAuth Client Registration', OrangeHRM's public v2 REST API authenticates via OAuth 2.0 (client_id/client_secret exchanged for a bearer token), not via the username/password used by the web login form, and there is no documented REST 'login' endpoint. The POST /web/index.php/auth/validate call observed during exploration is the web UI's internal, undocumented form submission — not a public API contract — so asserting on it would be testing an implementation detail that can change without notice. Login therefore has no api-type scenarios; api-layer authentication is covered where it belongs, in other features' api scenarios once an OAuth client is registered.",
+    "login-unauthenticated-page-guard is an addition beyond the three stated acceptance criteria. It is grounded in observed behavior (logout then direct dashboard navigation redirects to login) and kept because a broken auth guard is a security defect, not a Minor issue. It is distinct from the out-of-scope 'session persistence / remember-me' item. It remains a ui scenario: it asserts the browser-level redirect and the rendered 'Login' heading, not an API status code.",
+    "Priority Hint 'critical' was honored for the happy path. Invalid-credential rejection was also raised to critical (the hint's implied blanket priority) because accepting bad credentials is a security failure; blank-field validation was kept at major.",
+    "playwright.config.ts sets storageState: 'playwright/.auth/admin.json' for the whole 'ui' project and makes it depend on the 'setup' project. Every ui scenario in this plan requires an UNAUTHENTICATED context, so the generated spec must override storageState (e.g. test.use({ storageState: { cookies: [], origins: [] } })) or these tests will start already logged in and fail. This is the single most likely cause of a first-run failure.",
+    ".env and .env.example both exist at the repo root and define BASE_URL, ADMIN_USERNAME, ADMIN_PASSWORD and API_BASE_URL — everything the four ui scenarios need. Neither file defines OAUTH_CLIENT_ID or OAUTH_CLIENT_SECRET, which is expected and not a blocker here: ui-only login does not require them. They will need to be registered (Admin > Configuration > Register OAuth Client) and added to .env before any other feature's api-type scenarios can be planned or generated.",
+    "The logged-in demo user's display name showed as 'Shakti Mishra', not 'Admin'. This is mutable shared-demo state, so no scenario asserts on the display name — the happy path asserts on the 'Dashboard' heading and URL instead."
+  ],
+  "outOfScope": [
+    "Password reset / \"Forgot your password?\" flow — separate feature per requirements. The paragraph 'Forgot your password?' is present on the live login page but was not clicked.",
+    "Remember-me / session persistence behavior — not part of core login correctness per requirements; no remember-me control exists on the live form.",
+    "Account lockout after repeated failed attempts — edge case, not confirmed to exist on this demo instance; repeated failures during exploration only ever produced 'Invalid credentials'.",
+    "Password field masking / show-password toggle — no toggle control exists on the live form; masking alone would be a Minor scenario.",
+    "The 'Username : Admin' / 'Password : admin123' demo-credential hint block rendered on the login page — cosmetic demo-only content, Minor.",
+    "Locale/i18n variants of the validation and error strings (a GET /core/i18n/messages call was observed on each page load) — untested, would need a second locale to verify.",
+    "Rate limiting or brute-force throttling on POST /auth/validate — deliberately not probed to avoid abusing the shared public demo instance.",
+    "The entire API layer of Login — no api-type scenarios. Per CLAUDE.md > 'API Testing Prerequisite: OAuth Client Registration', OrangeHRM's v2 REST API authenticates via OAuth 2.0 (client_id/client_secret => bearer token) and exposes NO documented REST login endpoint. The POST /web/index.php/auth/validate + 302 flow seen during exploration is the web UI's internal, undocumented mechanism; tests against it would assert on an implementation detail with no contract behind it, and would duplicate what the ui scenarios already cover end-to-end. The related 401 'Session expired' probe against /web/index.php/api/v2/dashboard/employees/action-summary is likewise dropped — it exercises cookie-session auth, not the OAuth bearer-token auth that real api-type tests will use. This is a settled decision; do not reintroduce api login scenarios. OAuth-authenticated api coverage belongs to the features that actually have documented v2 endpoints (e.g. PIM employee CRUD), once OAUTH_CLIENT_ID/OAUTH_CLIENT_SECRET exist in .env."
+  ],
+  "residualDataNote": "None. Exploration created no records — only a login session, which was explicitly terminated via the UI Logout menu item, and the resulting unauthenticated state was verified. One incidental side effect: a Help tab opened to starterhelp.orangehrm.com was closed immediately. No server-side data was added, edited, or deleted. This revision pass did not touch the live app at all."
+}

@@ -1,0 +1,288 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e4]:
+    - text: Line wrap
+    - checkbox "Line wrap" [ref=f2e5]
+  - table [ref=f2e6]:
+    - rowgroup [ref=f2e7]:
+      - row [ref=f2e8]:
+        - cell "1" [ref=f2e9]
+        - cell "<!DOCTYPE html>" [ref=f2e10]
+      - row [ref=f2e11]:
+        - cell "2" [ref=f2e12]
+        - cell "<html>" [ref=f2e13]
+      - row [ref=f2e14]:
+        - cell "3" [ref=f2e15]
+        - cell "<head>" [ref=f2e16]
+      - row [ref=f2e17]:
+        - cell "4" [ref=f2e18]
+        - cell "<meta charset=\"UTF-8\">" [ref=f2e19]
+      - row [ref=f2e21]:
+        - cell "5" [ref=f2e22]
+        - cell "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">" [ref=f2e23]
+      - row [ref=f2e25]:
+        - cell "6" [ref=f2e26]
+        - cell "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">" [ref=f2e27]
+      - row [ref=f2e29]:
+        - cell "7" [ref=f2e30]
+        - cell "<title>OrangeHRM</title>" [ref=f2e31]
+      - row [ref=f2e32]:
+        - cell "8" [ref=f2e33]
+        - cell [ref=f2e34]:
+          - generic [ref=f2e35]:
+            - text: <link rel="icon" href="
+            - link "/web/dist/favicon.ico?v=1783336755185" [ref=f2e36] [cursor=pointer]:
+              - /url: /web/dist/favicon.ico?v=1783336755185
+            - text: "\">"
+      - row [ref=f2e37]:
+        - cell "9" [ref=f2e38]
+        - cell [ref=f2e39]:
+          - generic [ref=f2e40]:
+            - text: <link href="
+            - link "/web/dist/css/chunk-vendors.css?v=1783336755185" [ref=f2e41] [cursor=pointer]:
+              - /url: /web/dist/css/chunk-vendors.css?v=1783336755185
+            - text: "\" rel=\"preload\" as=\"style\">"
+      - row [ref=f2e42]:
+        - cell "10" [ref=f2e43]
+        - cell [ref=f2e44]:
+          - generic [ref=f2e45]:
+            - text: <link href="
+            - link "/web/dist/css/app.css?v=1783336755185" [ref=f2e46] [cursor=pointer]:
+              - /url: /web/dist/css/app.css?v=1783336755185
+            - text: "\" rel=\"preload\" as=\"style\">"
+      - row [ref=f2e47]:
+        - cell "11" [ref=f2e48]
+        - cell [ref=f2e49]:
+          - generic [ref=f2e50]:
+            - text: <link href="
+            - link "/web/dist/js/chunk-vendors.js?v=1783336755185" [ref=f2e51] [cursor=pointer]:
+              - /url: /web/dist/js/chunk-vendors.js?v=1783336755185
+            - text: "\" rel=\"preload\" as=\"script\">"
+      - row [ref=f2e52]:
+        - cell "12" [ref=f2e53]
+        - cell [ref=f2e54]:
+          - generic [ref=f2e55]:
+            - text: <link href="
+            - link "/web/dist/js/app.js?v=1783336755185" [ref=f2e56] [cursor=pointer]:
+              - /url: /web/dist/js/app.js?v=1783336755185
+            - text: "\" rel=\"preload\" as=\"script\">"
+      - row [ref=f2e57]:
+        - cell "13" [ref=f2e58]
+        - cell [ref=f2e59]:
+          - generic [ref=f2e60]:
+            - text: <link href="
+            - link "/web/dist/css/chunk-vendors.css?v=1783336755185" [ref=f2e61] [cursor=pointer]:
+              - /url: /web/dist/css/chunk-vendors.css?v=1783336755185
+            - text: "\" rel=\"stylesheet\"/>"
+      - row [ref=f2e62]:
+        - cell "14" [ref=f2e63]
+        - cell [ref=f2e64]:
+          - generic [ref=f2e65]:
+            - text: <link href="
+            - link "/web/dist/css/app.css?v=1783336755185" [ref=f2e66] [cursor=pointer]:
+              - /url: /web/dist/css/app.css?v=1783336755185
+            - text: "\" rel=\"stylesheet\"/>"
+      - row [ref=f2e67]:
+        - cell "15" [ref=f2e68]
+        - cell "</head>" [ref=f2e69]
+      - row [ref=f2e70]:
+        - cell "16" [ref=f2e71]
+        - cell "<body>" [ref=f2e72]
+      - row [ref=f2e73]:
+        - cell "17" [ref=f2e74]
+        - cell "<style>" [ref=f2e75]
+      - row [ref=f2e76]:
+        - cell "18" [ref=f2e77]
+        - 'cell ":root {" [ref=f2e78]'
+      - row [ref=f2e79]:
+        - cell "19" [ref=f2e80]
+        - cell "--oxd-primary-one-color:#FF7B1D;" [ref=f2e81]
+      - row [ref=f2e82]:
+        - cell "20" [ref=f2e83]
+        - cell "--oxd-primary-font-color:#FFFFFF;" [ref=f2e84]
+      - row [ref=f2e85]:
+        - cell "21" [ref=f2e86]
+        - cell "--oxd-secondary-four-color:#76BC21;" [ref=f2e87]
+      - row [ref=f2e88]:
+        - cell "22" [ref=f2e89]
+        - cell "--oxd-secondary-font-color:#FFFFFF;" [ref=f2e90]
+      - row [ref=f2e91]:
+        - cell "23" [ref=f2e92]
+        - cell "--oxd-primary-gradient-start-color:#FF920B;" [ref=f2e93]
+      - row [ref=f2e94]:
+        - cell "24" [ref=f2e95]
+        - cell "--oxd-primary-gradient-end-color:#F35C17;" [ref=f2e96]
+      - row [ref=f2e97]:
+        - cell "25" [ref=f2e98]
+        - cell "--oxd-secondary-gradient-start-color:#FF920B;" [ref=f2e99]
+      - row [ref=f2e100]:
+        - cell "26" [ref=f2e101]
+        - cell "--oxd-secondary-gradient-end-color:#F35C17;" [ref=f2e102]
+      - row [ref=f2e103]:
+        - cell "27" [ref=f2e104]
+        - cell "--oxd-primary-one-lighten-5-color:#ff8a37;" [ref=f2e105]
+      - row [ref=f2e106]:
+        - cell "28" [ref=f2e107]
+        - cell "--oxd-primary-one-lighten-30-color:#ffd4b6;" [ref=f2e108]
+      - row [ref=f2e109]:
+        - cell "29" [ref=f2e110]
+        - cell "--oxd-primary-one-darken-5-color:#ff6c03;" [ref=f2e111]
+      - row [ref=f2e112]:
+        - cell "30" [ref=f2e113]
+        - cell "--oxd-primary-one-alpha-10-color:rgba(255, 123, 29, 0.1);" [ref=f2e114]
+      - row [ref=f2e115]:
+        - cell "31" [ref=f2e116]
+        - cell "--oxd-primary-one-alpha-15-color:rgba(255, 123, 29, 0.15);" [ref=f2e117]
+      - row [ref=f2e118]:
+        - cell "32" [ref=f2e119]
+        - cell "--oxd-primary-one-alpha-20-color:rgba(255, 123, 29, 0.2);" [ref=f2e120]
+      - row [ref=f2e121]:
+        - cell "33" [ref=f2e122]
+        - cell "--oxd-primary-one-alpha-50-color:rgba(255, 123, 29, 0.5);" [ref=f2e123]
+      - row [ref=f2e124]:
+        - cell "34" [ref=f2e125]
+        - cell "--oxd-secondary-four-lighten-5-color:#84d225;" [ref=f2e126]
+      - row [ref=f2e127]:
+        - cell "35" [ref=f2e128]
+        - cell "--oxd-secondary-four-darken-5-color:#68a61d;" [ref=f2e129]
+      - row [ref=f2e130]:
+        - cell "36" [ref=f2e131]
+        - cell "--oxd-secondary-four-alpha-10-color:rgba(118, 188, 33, 0.1);" [ref=f2e132]
+      - row [ref=f2e133]:
+        - cell "37" [ref=f2e134]
+        - cell "--oxd-secondary-four-alpha-15-color:rgba(118, 188, 33, 0.15);" [ref=f2e135]
+      - row [ref=f2e136]:
+        - cell "38" [ref=f2e137]
+        - cell "--oxd-secondary-four-alpha-20-color:rgba(118, 188, 33, 0.2);" [ref=f2e138]
+      - row [ref=f2e139]:
+        - cell "39" [ref=f2e140]
+        - cell "--oxd-secondary-four-alpha-50-color:rgba(118, 188, 33, 0.5);" [ref=f2e141]
+      - row [ref=f2e142]:
+        - cell "40" [ref=f2e143]
+        - 'cell "}" [ref=f2e144]'
+      - row [ref=f2e145]:
+        - cell "41" [ref=f2e146]
+        - cell "</style>" [ref=f2e147]
+      - row [ref=f2e148]:
+        - cell "42" [ref=f2e149]
+        - cell "<noscript>" [ref=f2e150]
+      - row [ref=f2e151]:
+        - cell "43" [ref=f2e152]
+        - cell "<strong>" [ref=f2e153]
+      - row [ref=f2e154]:
+        - cell "44" [ref=f2e155]
+        - cell "We're sorry but orangehrm doesn't work properly without JavaScript enabled. Please enable it to continue." [ref=f2e156]
+      - row [ref=f2e157]:
+        - cell "45" [ref=f2e158]
+        - cell "</strong>" [ref=f2e159]
+      - row [ref=f2e160]:
+        - cell "46" [ref=f2e161]
+        - cell "</noscript>" [ref=f2e162]
+      - row [ref=f2e163]:
+        - cell "47" [ref=f2e164]
+        - cell [ref=f2e165]
+      - row [ref=f2e166]:
+        - cell "48" [ref=f2e167]
+        - cell "<div id=\"app\">" [ref=f2e168]
+      - row [ref=f2e170]:
+        - cell "49" [ref=f2e171]
+        - cell "<auth-login" [ref=f2e172]
+      - row [ref=f2e173]:
+        - cell "50" [ref=f2e174]
+        - cell ":token=\"&quot;e5ce10d75e5a2e797e98.UymF-17PW7pn8Nadq8r-n6E5CI040Sxl8P6JqjAUq10.YEXCwzKMAckvufuu8_usqf5qS-tinxkQoKbT7Wlkw2U_Z_LIMbcO_ErGvQ&quot;\"" [ref=f2e175]
+      - row [ref=f2e177]:
+        - cell "51" [ref=f2e178]
+        - cell ":login-logo-src=\"&quot;\\/web\\/images\\/ohrm_logo.png&quot;\"" [ref=f2e179]
+      - row [ref=f2e181]:
+        - cell "52" [ref=f2e182]
+        - cell ":login-banner-src=\"&quot;\\/web\\/images\\/ohrm_branding.png?v=1783336755185&quot;\"" [ref=f2e183]
+      - row [ref=f2e185]:
+        - cell "53" [ref=f2e186]
+        - cell ":show-social-media=\"true\"" [ref=f2e187]
+      - row [ref=f2e189]:
+        - cell "54" [ref=f2e190]
+        - cell ":is-demo-mode=\"true\"" [ref=f2e191]
+      - row [ref=f2e193]:
+        - cell "55" [ref=f2e194]
+        - cell ":authenticators=\"[]\"" [ref=f2e195]
+      - row [ref=f2e197]:
+        - cell "56" [ref=f2e198]
+        - cell ">" [ref=f2e199]
+      - row [ref=f2e200]:
+        - cell "57" [ref=f2e201]
+        - cell "<template v-slot:footer>" [ref=f2e202]
+      - row [ref=f2e204]:
+        - cell "58" [ref=f2e205]
+        - cell "<div class=\"orangehrm-copyright-wrapper\">" [ref=f2e206]
+      - row [ref=f2e208]:
+        - cell "59" [ref=f2e209]
+        - cell "<oxd-text tag=\"p\" class=\"orangehrm-copyright\">OrangeHRM OS 5.9</oxd-text>" [ref=f2e210]:
+          - generic [ref=f2e211]: <oxd-text tag="p" class="orangehrm-copyright">
+          - text: OrangeHRM OS 5.9</oxd-text>
+      - row [ref=f2e212]:
+        - cell "60" [ref=f2e213]
+        - cell "<oxd-text tag=\"p\" class=\"orangehrm-copyright\">&copy; 2005 - 2026 <a href=\"http://www.orangehrm.com\" target=\"_blank\">OrangeHRM, Inc</a>. All rights reserved.</oxd-text>" [ref=f2e214]:
+          - generic [ref=f2e215]: <oxd-text tag="p" class="orangehrm-copyright">
+          - text: "&copy; 2005 - 2026"
+          - generic [ref=f2e216]:
+            - text: <a href="
+            - link "http://www.orangehrm.com" [ref=f2e217] [cursor=pointer]:
+              - /url: http://www.orangehrm.com
+            - text: "\" target=\"_blank\">"
+          - text: OrangeHRM, Inc</a>. All rights reserved.</oxd-text>
+      - row [ref=f2e218]:
+        - cell "61" [ref=f2e219]
+        - cell "</div>" [ref=f2e220]
+      - row [ref=f2e221]:
+        - cell "62" [ref=f2e222]
+        - cell "</template>" [ref=f2e223]
+      - row [ref=f2e224]:
+        - cell "63" [ref=f2e225]
+        - cell "</auth-login>" [ref=f2e226]
+      - row [ref=f2e227]:
+        - cell "64" [ref=f2e228]
+        - cell "</div>" [ref=f2e229]
+      - row [ref=f2e230]:
+        - cell "65" [ref=f2e231]
+        - cell "<script type=\"text/javascript\">" [ref=f2e232]
+      - row [ref=f2e234]:
+        - cell "66" [ref=f2e235]
+        - 'cell "window.appGlobal = {" [ref=f2e236]'
+      - row [ref=f2e237]:
+        - cell "67" [ref=f2e238]
+        - 'cell "baseUrl: \"/web/index.php\"," [ref=f2e239]'
+      - row [ref=f2e240]:
+        - cell "68" [ref=f2e241]
+        - 'cell "publicPath: \"/web\"," [ref=f2e242]'
+      - row [ref=f2e243]:
+        - cell "69" [ref=f2e244]
+        - 'cell "};" [ref=f2e245]'
+      - row [ref=f2e246]:
+        - cell "70" [ref=f2e247]
+        - cell "</script>" [ref=f2e248]
+      - row [ref=f2e249]:
+        - cell "71" [ref=f2e250]
+        - cell [ref=f2e251]:
+          - generic [ref=f2e252]:
+            - text: <script src="
+            - link "/web/dist/js/chunk-vendors.js?v=1783336755185" [ref=f2e253] [cursor=pointer]:
+              - /url: /web/dist/js/chunk-vendors.js?v=1783336755185
+            - text: "\">"
+          - text: </script>
+      - row [ref=f2e254]:
+        - cell "72" [ref=f2e255]
+        - cell [ref=f2e256]:
+          - generic [ref=f2e257]:
+            - text: <script src="
+            - link "/web/dist/js/app.js?v=1783336755185" [ref=f2e258] [cursor=pointer]:
+              - /url: /web/dist/js/app.js?v=1783336755185
+            - text: "\">"
+          - text: </script>
+      - row [ref=f2e259]:
+        - cell "73" [ref=f2e260]
+        - cell "</body>" [ref=f2e261]
+      - row [ref=f2e262]:
+        - cell "74" [ref=f2e263]
+        - cell "</html>" [ref=f2e264]
+      - row [ref=f2e265]:
+        - cell "75" [ref=f2e266]
+        - cell [ref=f2e267]

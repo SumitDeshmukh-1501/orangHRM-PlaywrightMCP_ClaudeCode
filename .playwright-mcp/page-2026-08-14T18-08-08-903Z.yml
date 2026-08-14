@@ -1,0 +1,267 @@
+- generic [ref=f3e3]:
+  - generic:
+    - complementary [ref=f3e4]:
+      - navigation "Sidepanel" [ref=f3e5]:
+        - generic [ref=f3e6]:
+          - link [ref=f3e7] [cursor=pointer]:
+            - /url: https://www.orangehrm.com/
+            - img "client brand banner" [ref=f3e9]
+          - text: 
+        - generic [ref=f3e10]:
+          - generic [ref=f3e11]:
+            - generic [ref=f3e12]:
+              - textbox "Search" [ref=f3e15]
+              - button "" [ref=f3e16] [cursor=pointer]
+            - separator [ref=f3e18]
+          - list [ref=f3e19]:
+            - listitem [ref=f3e20]:
+              - link "Admin" [ref=f3e21] [cursor=pointer]:
+                - /url: /web/index.php/admin/viewAdminModule
+            - listitem [ref=f3e25]:
+              - link "PIM" [ref=f3e26] [cursor=pointer]:
+                - /url: /web/index.php/pim/viewPimModule
+            - listitem [ref=f3e41]:
+              - link "Leave" [ref=f3e42] [cursor=pointer]:
+                - /url: /web/index.php/leave/viewLeaveModule
+            - listitem [ref=f3e46]:
+              - link "Time" [ref=f3e47] [cursor=pointer]:
+                - /url: /web/index.php/time/viewTimeModule
+            - listitem [ref=f3e54]:
+              - link "Recruitment" [ref=f3e55] [cursor=pointer]:
+                - /url: /web/index.php/recruitment/viewRecruitmentModule
+            - listitem [ref=f3e62]:
+              - link "My Info" [ref=f3e63] [cursor=pointer]:
+                - /url: /web/index.php/pim/viewMyDetails
+            - listitem [ref=f3e70]:
+              - link "Performance" [ref=f3e71] [cursor=pointer]:
+                - /url: /web/index.php/performance/viewPerformanceModule
+            - listitem [ref=f3e80]:
+              - link "Dashboard" [ref=f3e81] [cursor=pointer]:
+                - /url: /web/index.php/dashboard/index
+            - listitem [ref=f3e85]:
+              - link "Directory" [ref=f3e86] [cursor=pointer]:
+                - /url: /web/index.php/directory/viewDirectory
+            - listitem [ref=f3e90]:
+              - link "Maintenance" [ref=f3e91] [cursor=pointer]:
+                - /url: /web/index.php/maintenance/viewMaintenanceModule
+            - listitem [ref=f3e96]:
+              - link "Claim" [ref=f3e97] [cursor=pointer]:
+                - /url: /web/index.php/claim/viewClaimModule
+            - listitem [ref=f3e105]:
+              - link "Buzz" [ref=f3e106] [cursor=pointer]:
+                - /url: /web/index.php/buzz/viewBuzz
+    - banner [ref=f3e110]:
+      - generic [ref=f3e111]:
+        - generic [ref=f3e112]:
+          - text: 
+          - generic [ref=f3e113]:
+            - heading "Admin" [level=6] [ref=f3e114]
+            - heading "/ User Management" [level=6] [ref=f3e115]
+        - link [ref=f3e117]:
+          - /url: https://orangehrm.com/open-source/upgrade-to-advanced
+          - button "Upgrade" [ref=f3e118] [cursor=pointer]
+        - list [ref=f3e124]:
+          - listitem [ref=f3e125]:
+            - generic [ref=f3e126] [cursor=pointer]:
+              - img "profile picture" [ref=f3e127]
+              - paragraph [ref=f3e128]: manda user
+              - generic [ref=f3e129]: 
+      - navigation "Topbar Menu" [ref=f3e131]:
+        - list [ref=f3e132]:
+          - listitem [ref=f3e133] [cursor=pointer]:
+            - generic [ref=f3e134]:
+              - text: User Management
+              - generic [ref=f3e135]: 
+          - listitem [ref=f3e136] [cursor=pointer]:
+            - generic [ref=f3e137]:
+              - text: Job
+              - generic [ref=f3e138]: 
+          - listitem [ref=f3e139] [cursor=pointer]:
+            - generic [ref=f3e140]:
+              - text: Organization
+              - generic [ref=f3e141]: 
+          - listitem [ref=f3e142] [cursor=pointer]:
+            - generic [ref=f3e143]:
+              - text: Qualifications
+              - generic [ref=f3e144]: 
+          - listitem [ref=f3e145] [cursor=pointer]:
+            - generic [ref=f3e146]:
+              - text: More
+              - generic [ref=f3e147]: 
+          - button "" [ref=f3e149] [cursor=pointer]
+  - generic [ref=f3e151]:
+    - generic [ref=f3e153]:
+      - generic [ref=f3e154]:
+        - generic [ref=f3e155]:
+          - heading "System Users" [level=5] [ref=f3e157]
+          - button "" [ref=f3e160] [cursor=pointer]
+        - separator [ref=f3e162]
+        - generic [ref=f3e164]:
+          - generic [ref=f3e166]:
+            - generic [ref=f3e168]:
+              - generic [ref=f3e169]: Username
+              - textbox [ref=f3e172]
+            - generic [ref=f3e174]:
+              - generic [ref=f3e175]: User Role
+              - generic [ref=f3e179] [cursor=pointer]:
+                - generic [ref=f3e180]: "-- Select --"
+                - generic [ref=f3e181]: 
+            - generic [ref=f3e184]:
+              - generic [ref=f3e185]: Employee Name
+              - textbox "Type for hints..." [ref=f3e190]
+            - generic [ref=f3e192]:
+              - generic [ref=f3e193]: Status
+              - generic [ref=f3e197] [cursor=pointer]:
+                - generic [ref=f3e198]: "-- Select --"
+                - generic [ref=f3e199]: 
+          - separator [ref=f3e201]
+          - generic [ref=f3e202]:
+            - button "Reset" [active] [ref=f3e203] [cursor=pointer]
+            - button "Search" [ref=f3e204] [cursor=pointer]
+      - generic [ref=f3e205]:
+        - button " Add" [ref=f3e207] [cursor=pointer]:
+          - generic [ref=f3e208]: 
+          - text: Add
+        - generic [ref=f3e292]:
+          - separator [ref=f3e293]
+          - generic [ref=f3e294]: (8) Records Found
+        - table [ref=f3e214]:
+          - rowgroup [ref=f3e296]:
+            - row [ref=f3e297]:
+              - columnheader "" [ref=f3e298]:
+                - generic [ref=f3e300] [cursor=pointer]:
+                  - checkbox "" [ref=f3e301]
+                  - generic [ref=f3e302]: 
+              - columnheader "Username " [ref=f3e304]:
+                - text: Username
+                - generic [ref=f3e305]:
+                  - generic [ref=f3e306] [cursor=pointer]: 
+                  - text:  
+              - columnheader "User Role " [ref=f3e307]:
+                - text: User Role
+                - generic [ref=f3e308]:
+                  - generic [ref=f3e309] [cursor=pointer]: 
+                  - text:  
+              - columnheader "Employee Name " [ref=f3e310]:
+                - text: Employee Name
+                - generic [ref=f3e311]:
+                  - generic [ref=f3e312] [cursor=pointer]: 
+                  - text:  
+              - columnheader "Status " [ref=f3e313]:
+                - text: Status
+                - generic [ref=f3e314]:
+                  - generic [ref=f3e315] [cursor=pointer]: 
+                  - text:  
+              - columnheader "Actions" [ref=f3e316]
+          - rowgroup [ref=f3e317]:
+            - row [ref=f3e319]:
+              - cell "" [ref=f3e320]:
+                - generic [ref=f3e324]:
+                  - checkbox "" [ref=f3e325]
+                  - generic [ref=f3e326]: 
+              - cell "Admin" [ref=f3e328]
+              - cell "Admin" [ref=f3e330]
+              - cell "manda user" [ref=f3e332]
+              - cell "Enabled" [ref=f3e334]
+              - cell [ref=f3e336]:
+                - generic [ref=f3e337]:
+                  - button "" [ref=f3e338] [cursor=pointer]
+                  - button "" [ref=f3e340] [cursor=pointer]
+            - row [ref=f3e343]:
+              - cell "" [ref=f3e344]:
+                - generic [ref=f3e347] [cursor=pointer]:
+                  - checkbox "" [ref=f3e348]
+                  - generic [ref=f3e349]: 
+              - cell "FMLName" [ref=f3e351]
+              - cell "ESS" [ref=f3e353]
+              - cell "Qwerty LName" [ref=f3e355]
+              - cell "Enabled" [ref=f3e357]
+              - cell [ref=f3e359]:
+                - generic [ref=f3e360]:
+                  - button "" [ref=f3e361] [cursor=pointer]
+                  - button "" [ref=f3e363] [cursor=pointer]
+            - row [ref=f3e366]:
+              - cell "" [ref=f3e367]:
+                - generic [ref=f3e370] [cursor=pointer]:
+                  - checkbox "" [ref=f3e371]
+                  - generic [ref=f3e372]: 
+              - cell "FMLName1" [ref=f3e374]
+              - cell "ESS" [ref=f3e376]
+              - cell "FName LName" [ref=f3e378]
+              - cell "Enabled" [ref=f3e380]
+              - cell [ref=f3e382]:
+                - generic [ref=f3e383]:
+                  - button "" [ref=f3e384] [cursor=pointer]
+                  - button "" [ref=f3e386] [cursor=pointer]
+            - row [ref=f3e389]:
+              - cell "" [ref=f3e390]:
+                - generic [ref=f3e393] [cursor=pointer]:
+                  - checkbox "" [ref=f3e394]
+                  - generic [ref=f3e395]: 
+              - cell "Jobinsam@6742" [ref=f3e397]
+              - cell "ESS" [ref=f3e399]
+              - cell "Jobin Sam" [ref=f3e401]
+              - cell "Enabled" [ref=f3e403]
+              - cell [ref=f3e405]:
+                - generic [ref=f3e406]:
+                  - button "" [ref=f3e407] [cursor=pointer]
+                  - button "" [ref=f3e409] [cursor=pointer]
+            - row [ref=f3e412]:
+              - cell "" [ref=f3e413]:
+                - generic [ref=f3e416] [cursor=pointer]:
+                  - checkbox "" [ref=f3e417]
+                  - generic [ref=f3e418]: 
+              - cell "Test User_1786730410810" [ref=f3e420]
+              - cell "Admin" [ref=f3e422]
+              - cell "sww test" [ref=f3e424]
+              - cell "Enabled" [ref=f3e426]
+              - cell [ref=f3e428]:
+                - generic [ref=f3e429]:
+                  - button "" [ref=f3e430] [cursor=pointer]
+                  - button "" [ref=f3e432] [cursor=pointer]
+            - row [ref=f3e435]:
+              - cell "" [ref=f3e436]:
+                - generic [ref=f3e439] [cursor=pointer]:
+                  - checkbox "" [ref=f3e440]
+                  - generic [ref=f3e441]: 
+              - cell "Test User_1786730709146" [ref=f3e443]
+              - cell "Admin" [ref=f3e445]
+              - cell "sww test" [ref=f3e447]
+              - cell "Enabled" [ref=f3e449]
+              - cell [ref=f3e451]:
+                - generic [ref=f3e452]:
+                  - button "" [ref=f3e453] [cursor=pointer]
+                  - button "" [ref=f3e455] [cursor=pointer]
+            - row [ref=f3e458]:
+              - cell "" [ref=f3e459]:
+                - generic [ref=f3e462] [cursor=pointer]:
+                  - checkbox "" [ref=f3e463]
+                  - generic [ref=f3e464]: 
+              - cell "Test User_1786730792783" [ref=f3e466]
+              - cell "Admin" [ref=f3e468]
+              - cell "sww test" [ref=f3e470]
+              - cell "Enabled" [ref=f3e472]
+              - cell [ref=f3e474]:
+                - generic [ref=f3e475]:
+                  - button "" [ref=f3e476] [cursor=pointer]
+                  - button "" [ref=f3e478] [cursor=pointer]
+            - row [ref=f3e481]:
+              - cell "" [ref=f3e482]:
+                - generic [ref=f3e485] [cursor=pointer]:
+                  - checkbox "" [ref=f3e486]
+                  - generic [ref=f3e487]: 
+              - cell "Updatedewham" [ref=f3e489]
+              - cell "Admin" [ref=f3e491]
+              - cell "sww test" [ref=f3e493]
+              - cell "Enabled" [ref=f3e495]
+              - cell [ref=f3e497]:
+                - generic [ref=f3e498]:
+                  - button "" [ref=f3e499] [cursor=pointer]
+                  - button "" [ref=f3e501] [cursor=pointer]
+    - generic [ref=f3e261]:
+      - paragraph [ref=f3e262]: OrangeHRM OS 5.9
+      - paragraph [ref=f3e263]:
+        - text: © 2005 - 2026
+        - link "OrangeHRM, Inc" [ref=f3e264] [cursor=pointer]:
+          - /url: http://www.orangehrm.com
+        - text: . All rights reserved.

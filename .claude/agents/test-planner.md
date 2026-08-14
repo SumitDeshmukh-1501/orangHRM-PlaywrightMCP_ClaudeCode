@@ -33,6 +33,10 @@ behavior.
 3. **Confirm app access before exploring.** Check `playwright.config.ts` for
    `BASE_URL` / `use.baseURL`. If it's missing, or credentials aren't in
    `.env`, **ask — do not guess or invent them.**
+   For `api`-type scenarios specifically, also check `.env` for
+   `OAUTH_CLIENT_ID`/`OAUTH_CLIENT_SECRET`. If missing, tell the user
+   registration is required first (Admin > Configuration > Register OAuth
+   Client) and ask whether to proceed with `ui`-only scope in the meantime.
 
 ## Scope discipline — Critical/Major only
 

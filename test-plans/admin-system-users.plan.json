@@ -1,0 +1,269 @@
+{
+  "feature": "admin-system-users",
+  "sourceRequirement": "requirements/admin_module.md",
+  "createdAt": "2026-08-14T17:58:00.000Z",
+  "exploredAt": "2026-08-14T17:57:00.000Z",
+  "explorationNote": "Explored live at https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewSystemUsers logged in as ADMIN_USERNAME/ADMIN_PASSWORD from .env, via Playwright MCP. Walked the list, all four filters (Username / User Role / Employee Name / Status), the empty-result state, the Add User form (empty-submit validation, username min-length, duplicate username, password strength), a real successful create, and a real single-record delete including its confirmation dialog. The created user was deleted again and its absence verified — see residualDataNote. Every expectedResult string below is quoted from what was actually rendered.",
+  "coverageCheck": [
+    {
+      "criterion": "The Users list loads and displays existing system users with their Username, User Role, Employee Name, and Status.",
+      "coveredBy": "admin-system-users-list-loads — CONFIRMED live. Column headers are exactly 'Username', 'User Role', 'Employee Name', 'Status' plus an unlabelled leading select-all checkbox column and a trailing 'Actions' column that the requirements file did not mention."
+    },
+    {
+      "criterion": "Searching/filtering by Username returns only matching results.",
+      "coveredBy": "admin-system-users-search-by-username — CONFIRMED live: filtering Username='Ricardo' reduced '(46) Records Found' to '(1) Record Found' with a single matching row."
+    },
+    {
+      "criterion": "Filtering by a User Role or Status that has no matching records shows an appropriate \"no records found\" state, not an error.",
+      "coveredBy": "admin-system-users-search-no-match-empty-state — PARTIALLY CORRECTED. The empty state itself is confirmed (text 'No Records Found', empty table body, headers still rendered, no error toast — only an informational one). However the criterion's chosen trigger is not reproducible on this shared instance: User Role='ESS' + Status='Disabled' returned '(1) Record Found' during exploration, and role/status populations change constantly. The scenario therefore triggers the same empty state with a guaranteed-unmatched random Username instead, and role/status filtering is exercised (non-empty) in admin-system-users-list-loads. See assumptions[1]."
+    },
+    {
+      "criterion": "Admin can add a new system user with the required fields and the new user appears in the list afterward.",
+      "coveredBy": "admin-system-users-add-new-user — CONFIRMED live end to end, including the follow-up search that finds the new row. 'The required fields' is now pinned down: SIX starred fields (User Role, Employee Name, Status, Username, Password, Confirm Password) — see assumptions[2]."
+    },
+    {
+      "criterion": "Admin can delete an existing system user, and it no longer appears in the list afterward.",
+      "coveredBy": "admin-system-users-delete-user — CONFIRMED live, and the requirements file's open question is answered: delete DOES require a confirmation dialog ('Are you Sure?' / 'No, Cancel' / 'Yes, Delete'). See assumptions[3]."
+    },
+    {
+      "criterion": "Test Data: New usernames must be unique per run — generate fresh values at runtime, never hardcode a username.",
+      "coveredBy": "admin-system-users-add-new-user and admin-system-users-delete-user both use {{randomUsername}}. Additionally confirmed live that a collision would NOT silently pass: a duplicate username renders 'Already exists' and blocks Save, so a hardcoded username would cause exactly the false failure the requirements file warns about. admin-system-users-add-duplicate-username deliberately relies on this."
+    },
+    {
+      "criterion": "Test Data: Deleting a user during a test should target only data created by that test — never delete a pre-existing/seeded user.",
+      "coveredBy": "admin-system-users-delete-user — the spec must create its own user first (step 1) and delete only that username; the row is located by the generated username, never by row index. Called out again in that scenario's preconditions and in testData."
+    },
+    {
+      "criterion": "Test Data: Adding a system user likely requires linking to an existing employee record — may need a data precondition via utils/setup-data.ts (create an employee first via API).",
+      "coveredBy": "admin-system-users-add-new-user — CONFIRMED that Employee Name is required, but the setup-data.ts route is NOT needed and utils/setup-data.ts does not exist in this repo. An existing employee is discovered at runtime from the Employee Name autocomplete (typing a single character 'a' returned 5 hint options on the live instance). See assumptions[4] — this is the one thing the generator most needs to know."
+    },
+    {
+      "criterion": "Out of scope: API-level testing for this feature (OAuth client registration prerequisite).",
+      "coveredBy": "EXCLUDED — see outOfScope[0]. All 7 scenarios are type 'ui'. Honoured exactly: .env contains only BASE_URL, ADMIN_USERNAME, ADMIN_PASSWORD, API_BASE_URL — no OAUTH_CLIENT_ID/OAUTH_CLIENT_SECRET."
+    },
+    {
+      "criterion": "Out of scope: Editing an existing user's role/status.",
+      "coveredBy": "EXCLUDED — see outOfScope[1]. The pencil/edit action button was observed in the Actions cell but never clicked."
+    },
+    {
+      "criterion": "Out of scope: Password reset or credential-related behavior for system users.",
+      "coveredBy": "EXCLUDED — see outOfScope[2]. Password fields are set during creation only; no reset flow was exercised and the created user was never logged in as."
+    },
+    {
+      "criterion": "Out of scope: Bulk delete (multi-select) — unless observed to be trivial to also cover live.",
+      "coveredBy": "EXCLUDED — see outOfScope[3]. Row and header checkboxes exist, but bulk delete was judged NOT trivially safe to cover: a mis-targeted select-all on this shared instance (51 records, mostly other people's data) risks mass deletion of seeded users, which the requirements file forbids."
+    },
+    {
+      "criterion": "Type: ui",
+      "coveredBy": "All 7 scenarios are type 'ui'."
+    },
+    {
+      "criterion": "Priority Hint: critical for view/search and add; major for delete.",
+      "coveredBy": "Honoured — 3 critical (list, search, add), 4 major (empty state, required-field validation, duplicate username, delete). See assumptions[5] for the one place judgment was applied."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "admin-system-users-list-loads",
+      "title": "System Users list loads with all four data columns and returns records",
+      "type": "ui",
+      "priority": "critical",
+      "tags": ["@smoke", "@functional"],
+      "preconditions": [
+        "Logged in as Admin (the ui project's shared storageState is sufficient — no storageState override needed)"
+      ],
+      "steps": [
+        "Navigate to /web/index.php/admin/viewSystemUsers",
+        "Observe the page heading and the filter panel",
+        "Observe the results table headers and that at least one user row is rendered"
+      ],
+      "expectedResult": "Heading \"System Users\" (level 5) is visible; the filter panel shows labels \"Username\", \"User Role\", \"Employee Name\", \"Status\" with \"Reset\" and \"Search\" buttons; the table shows column headers \"Username\", \"User Role\", \"Employee Name\", \"Status\", \"Actions\"; at least one data row is present and the record-count text matches /\\(\\d+\\) Records? Found/",
+      "observedNotes": "Confirmed live 2026-08-14: URL /web/index.php/admin/viewSystemUsers (unauthenticated access redirects to /auth/login first). Breadcrumb headings are 'Admin' + '/ User Management' [level=6]; card heading 'System Users' [level=5]. Table columnheader accessible names include a trailing sort-icon space, i.e. 'Username ', 'User Role ', 'Employee Name ', 'Status ' — use a name regex or exact:false, not exact string equality. First column header is an unlabelled select-all checkbox; last is 'Actions' holding two icon-only buttons per row (delete, then edit) with EMPTY accessible names — locate them by row scope + nth/CSS, not by name. Count text was '(46) Records Found' at 17:52 and '(51) Records Found' at 17:55 — other people are writing to this instance concurrently, so never assert an absolute count, and note that above 50 records a 'Pagination Navigation' element appears. Status values seen: 'Enabled', 'Disabled'. User Role values seen: 'Admin', 'ESS'. Both filter dropdowns are custom widgets: the trigger is a div (not a <select>), and options appear as role=option inside role=listbox ('-- Select --', 'Admin', 'ESS' / '-- Select --', 'Enabled', 'Disabled'). No console errors during the whole session (0 messages).",
+      "testData": {},
+      "riskRationale": "This is the entry point for all user-account administration. If the list fails to render, an Admin cannot see, search, add or delete any login account, and every other scenario in this feature is unreachable."
+    },
+    {
+      "id": "admin-system-users-search-by-username",
+      "title": "Filtering by Username narrows the list to matching users only",
+      "type": "ui",
+      "priority": "critical",
+      "tags": ["@smoke", "@functional"],
+      "preconditions": [
+        "Logged in as Admin",
+        "On the System Users list page",
+        "The account named by ADMIN_USERNAME exists as a system user (it is the account under test, so it is guaranteed present)"
+      ],
+      "steps": [
+        "Enter the Admin username into the Username filter",
+        "Click Search",
+        "Observe the result rows and the record-count text"
+      ],
+      "expectedResult": "The record-count text matches /\\(\\d+\\) Records? Found/, at least one row is returned, every returned row's Username cell contains the searched term, and a row whose Username cell reads exactly the searched username is present",
+      "observedNotes": "Confirmed live 2026-08-14 with Username='Ricardo': the list went from '(46) Records Found' to '(1) Record Found' with the single row 'Ricardo | Admin | admin Admin123 | Enabled'. Note the singular/plural switch — '(1) Record Found' vs '(46) Records Found' — so assert with a regex, not a literal. Search fires GET /web/index.php/api/v2/admin/users?limit=50&offset=0&username=Ricardo&sortField=u.userName&sortOrder=ASC => 200 (observed via network only; NOT asserted, this is a ui scenario). LOCATOR WARNING: the Username filter input has NO accessible name and NO placeholder — getByRole('textbox', { name: 'Username' }) will NOT resolve. It must be located relative to its 'Username' label/input-group (the Employee Name filter next to it is the one with placeholder 'Type for hints...'). Whether the filter is an exact or partial (LIKE) match was NOT determined — hence the 'contains' + 'exact row exists' assertion pair rather than an exact-count assertion.",
+      "testData": {
+        "username": "{{env.ADMIN_USERNAME}}"
+      },
+      "riskRationale": "With 50+ accounts and pagination kicking in beyond 50, search is the only practical way an Admin finds a specific account. A broken filter that returns everything (or the wrong rows) leads to administering the wrong user's access."
+    },
+    {
+      "id": "admin-system-users-add-new-user",
+      "title": "Admin can create a new ESS system user and it appears in the list",
+      "type": "ui",
+      "priority": "critical",
+      "tags": ["@smoke", "@functional", "@e2e"],
+      "preconditions": [
+        "Logged in as Admin",
+        "At least one employee record exists to link the user to — satisfied at runtime by typing a single character into the Employee Name autocomplete and selecting the first hint; NO utils/setup-data.ts helper is required (and that file does not exist in this repo)",
+        "The test must delete the user it creates as cleanup (shared demo instance)"
+      ],
+      "steps": [
+        "Navigate to the System Users list and click Add",
+        "Select User Role \"ESS\"",
+        "Type a character into Employee Name and select the first autocomplete hint, capturing the selected employee's display text",
+        "Select Status \"Enabled\"",
+        "Enter a freshly generated unique Username",
+        "Enter the same generated password into Password and Confirm Password",
+        "Click Save",
+        "Search the list by the generated Username",
+        "Delete the created user as cleanup"
+      ],
+      "expectedResult": "Save navigates from /web/index.php/admin/saveSystemUser back to /web/index.php/admin/viewSystemUsers, and searching the generated Username returns exactly one row whose Username cell equals the generated username, User Role cell reads \"ESS\" and Status cell reads \"Enabled\"",
+      "observedNotes": "Confirmed live 2026-08-14 by actually creating user 'zz_qa_plan_7k3m9' (ESS / Enabled, linked to employee hint 'A8DCo 4Ys 010Z') and then deleting it. Add button accessible name is ' Add' (leading space from the icon) — match with a name regex or /Add/. Form URL is /web/index.php/admin/saveSystemUser; fields in DOM order: User Role* (custom select), Employee Name* (textbox, placeholder 'Type for hints...'), Status* (custom select), Username* (textbox, no accessible name), Password* (no accessible name), Confirm Password* (no accessible name), plus static helper paragraph 'For a strong password, please use a hard to guess combination of text with upper and lower case characters, symbols and numbers' and footer '* Required' with buttons 'Cancel' and 'Save'. FOUR of the six inputs have no accessible name, so every locator must be label-relative — this is the main locator risk for the generator. Typing 'a' into Employee Name returned a role=listbox with 5 role=option hints. IMPORTANT ASSERTION TRAP: the autocomplete option text includes the middle name ('A8DCo 4Ys 010Z') but the list's Employee Name cell renders first+last only ('A8DCo 010Z') — do NOT assert the list cell equals the picked hint text. Password 'Zz9!qaPlan' was accepted and a live strength indicator showed 'Very Weak' then 'Strong'. Save issued POST /web/index.php/api/v2/admin/users => 200 (network observation only, not asserted) and redirected to the list, where the count rose 46 -> 51 (other concurrent writers inflated it, so counts are unusable as an assertion). A success toast was NOT captured before it auto-dismissed, so do not assert on toast text here — assert the redirect plus the searchable row.",
+      "testData": {
+        "userRole": "ESS",
+        "status": "Enabled",
+        "username": "{{randomUsername}}",
+        "password": "{{randomStrongPassword}}",
+        "employeeName": "resolved at runtime from the Employee Name autocomplete (type '{{randomEmployeeHintChar}}' or a literal 'a' and select the first hint) — never hardcode an employee from this shared instance",
+        "cleanup": "delete the created {{randomUsername}} at the end of the test"
+      },
+      "riskRationale": "Creating a system user is the primary write operation of this page and the only way to grant anyone access to OrangeHRM. If it breaks, no new employee can ever log in — a hard blocker for onboarding."
+    },
+    {
+      "id": "admin-system-users-search-no-match-empty-state",
+      "title": "A search with no matches shows the \"No Records Found\" empty state, not an error",
+      "type": "ui",
+      "priority": "major",
+      "tags": ["@functional", "@regression"],
+      "preconditions": [
+        "Logged in as Admin",
+        "On the System Users list page"
+      ],
+      "steps": [
+        "Enter a randomly generated username that cannot exist into the Username filter",
+        "Click Search",
+        "Observe the results area"
+      ],
+      "expectedResult": "The text \"No Records Found\" is visible where the record count normally appears, the table body contains zero data rows while the column headers remain rendered, and no error state appears (the only notification is an informational toast, never an error)",
+      "observedNotes": "Confirmed live 2026-08-14 with Username='zz_no_such_user_9x7q': the '(n) Records Found' node is replaced by the exact text 'No Records Found' (title case, no parentheses and no zero — it is NOT '(0) Records Found'), the header row still renders all six columns, and tbody is empty. Request was GET .../api/v2/admin/users?...username=zz_no_such_user_9x7q... => 200, i.e. a normal success response, not a 4xx. A second observation during the delete step showed the empty result ALSO raises a bottom toast with class oxd-toast--info reading 'Info' / 'No Records Found' which auto-dismisses — so assert on the inline text (stable) rather than the toast (racy), and if asserting 'no error', assert the absence of oxd-toast--error specifically, since an info toast IS expected.",
+      "testData": {
+        "username": "{{randomBogusUsername}}"
+      },
+      "riskRationale": "Commonly hit whenever an Admin mistypes a username. If this regressed into a JS error or a blank/broken page, the Admin cannot tell 'no such user' from 'the page is broken', and would likely create a duplicate account."
+    },
+    {
+      "id": "admin-system-users-add-required-field-validation",
+      "title": "Saving the Add User form empty is blocked with inline validation on every required field",
+      "type": "ui",
+      "priority": "major",
+      "tags": ["@functional", "@regression"],
+      "preconditions": [
+        "Logged in as Admin",
+        "On /web/index.php/admin/saveSystemUser with every field untouched"
+      ],
+      "steps": [
+        "Click Save without entering anything",
+        "Observe the inline message under each of the six required fields",
+        "Observe that the page has not navigated away"
+      ],
+      "expectedResult": "The exact text \"Required\" appears inline beneath User Role, Employee Name, Status, Username and Password; the text \"Passwords do not match\" appears beneath Confirm Password; the URL remains /web/index.php/admin/saveSystemUser and no user is created",
+      "observedNotes": "Confirmed live 2026-08-14: an empty Save produced FIVE 'Required' messages (User Role, Employee Name, Status, Username, Password) and — notably — 'Passwords do not match' under Confirm Password rather than 'Required'. That asymmetry is real, reproducible and looks like a product defect (an untouched empty Confirm Password is being compared instead of required-checked); the plan asserts observed behavior, but see the suspected-bug note in assumptions[6] so nobody 'heals' this into 'Required'. Validation is client-side and inline (no toast, no role=alert wrapper): no POST to /api/v2/admin/users was issued and the URL did not change. All six labels carry a '*' suffix in their rendered text ('User Role*', 'Employee Name*', 'Status*', 'Username*', 'Password*', 'Confirm Password*'), and a '* Required' legend sits next to the Cancel/Save buttons.",
+      "testData": {},
+      "riskRationale": "The last line of defence against half-created login accounts. A regression here either lets an account be created with no role/status/password, or blocks a legitimate Admin behind a form that will not submit."
+    },
+    {
+      "id": "admin-system-users-add-duplicate-username",
+      "title": "An already-taken username is rejected with \"Already exists\" and cannot be saved",
+      "type": "ui",
+      "priority": "major",
+      "tags": ["@functional", "@regression"],
+      "preconditions": [
+        "Logged in as Admin",
+        "On /web/index.php/admin/saveSystemUser",
+        "A known-existing username is available — use ADMIN_USERNAME from .env, which is guaranteed to exist because the suite logs in with it"
+      ],
+      "steps": [
+        "Enter the known-existing username into the Username field",
+        "Move focus off the field and observe the inline message",
+        "Fill the remaining required fields with valid values and click Save",
+        "Observe that no navigation occurs"
+      ],
+      "expectedResult": "The exact text \"Already exists\" appears inline beneath Username, and Save does not create a record — the URL stays on /web/index.php/admin/saveSystemUser",
+      "observedNotes": "Confirmed live 2026-08-14: typing 'Ricardo' (an existing user) into Username rendered 'Already exists' beneath the field WITHOUT clicking Save — the check is asynchronous and fires on input/blur via GET /web/index.php/api/v2/admin/validation/user-name?userName=Ricardo => 200. The same endpoint fired for the unique value 'zz_qa_plan_7k3m9' and produced no message. This means the generator must wait for the message to appear (auto-retrying expect) rather than assuming it is synchronous, and must not race Save against the pending validation call. Also confirmed on the same field: a 2-character username renders 'Should be at least 5 characters' (see outOfScope[5]).",
+      "testData": {
+        "duplicateUsername": "{{env.ADMIN_USERNAME}}",
+        "userRole": "ESS",
+        "status": "Enabled",
+        "password": "{{randomStrongPassword}}",
+        "employeeName": "resolved at runtime from the Employee Name autocomplete"
+      },
+      "riskRationale": "Username uniqueness is what makes a login account identifiable. If duplicates slipped through, authentication and audit trails become ambiguous — and per the requirements file, this same check is what protects every other test from a hardcoded-username collision."
+    },
+    {
+      "id": "admin-system-users-delete-user",
+      "title": "Admin can delete a system user after confirming, and it disappears from the list",
+      "type": "ui",
+      "priority": "major",
+      "tags": ["@functional", "@regression", "@e2e"],
+      "preconditions": [
+        "Logged in as Admin",
+        "The test has created its OWN system user via the Add User form with a generated username — it must never delete a pre-existing/seeded account on this shared instance",
+        "The target row is located by its generated username, never by row index or position"
+      ],
+      "steps": [
+        "Search the list by the generated username so exactly one row is shown",
+        "Click the delete (trash) action button on that row",
+        "Observe the confirmation dialog",
+        "Click \"Yes, Delete\"",
+        "Search the generated username again"
+      ],
+      "expectedResult": "A confirmation dialog appears containing \"Are you Sure?\" and \"The selected record will be permanently deleted. Are you sure you want to continue?\" with buttons \"No, Cancel\" and \"Yes, Delete\"; after confirming, re-searching the username shows \"No Records Found\" and no row for that username",
+      "observedNotes": "Confirmed live 2026-08-14 by deleting the user this session created ('zz_qa_plan_7k3m9'). ANSWERS THE REQUIREMENTS FILE'S OPEN QUESTION: delete DOES require confirmation. Dialog content exactly: paragraph 'Are you Sure?', paragraph 'The selected record will be permanently deleted. Are you sure you want to continue?', a '×' close button, button 'No, Cancel', and button ' Yes, Delete' (LEADING SPACE from its icon — match with a name regex or /Yes, Delete/). The dialog container is exposed as role=document, NOT role=dialog, so getByRole('dialog') will NOT resolve. In the Actions cell the FIRST icon-only button is delete and the second is edit; both have empty accessible names, so scope to the row and use the first action button. Confirming issued DELETE /web/index.php/api/v2/admin/users => 200 and the grid refetched WITH the username filter still applied, immediately rendering 'No Records Found' — the active filter survives the delete, so no re-search is strictly needed, but re-searching is the more robust assertion. No error toast; the only toast seen was info 'No Records Found'.",
+      "testData": {
+        "username": "{{randomUsername}} — created by this test, deleted by this test",
+        "password": "{{randomStrongPassword}}",
+        "userRole": "ESS",
+        "status": "Enabled"
+      },
+      "riskRationale": "Destructive and irreversible ('permanently deleted'). Two failure modes both matter: deletion silently not working leaves ex-employees with live logins, and the confirmation dialog failing means an Admin can nuke an account with one stray click."
+    }
+  ],
+  "assumptions": [
+    "The requirements file's ## Notes warned that nothing was confirmed live; this plan is the confirmation pass. Field labels in the file were RIGHT: the list columns really are 'Username', 'User Role', 'Employee Name', 'Status' (plus an unmentioned select-all checkbox column and an 'Actions' column). What the file got wrong or left open is corrected in assumptions[1]-[4] and [6] below.",
+    "CORRECTION to acceptance criterion 3: the file suggests triggering the empty state by filtering on a User Role or Status with no matching records. That is not achievable reliably here — User Role='ESS' + Status='Disabled' returned '(1) Record Found' live, and this shared instance's role/status mix changes minute to minute (record count moved 46 -> 51 during a five-minute session from other users' writes). The empty state is therefore triggered with an impossible random Username, which exercises the identical 'No Records Found' rendering. Role/Status filter controls are still covered structurally in admin-system-users-list-loads.",
+    "CORRECTION/RESOLUTION of 'the required fields' for Add User: there are SIX starred required fields — User Role, Employee Name, Status, Username, Password, Confirm Password. The requirements file did not enumerate these. Consequence for the generator: the happy path cannot be a two-field form fill; it needs a role select, an autocomplete pick, a status select and a matching password pair.",
+    "RESOLUTION of the file's open question on delete: a confirmation dialog IS required, and its exact strings are recorded in admin-system-users-delete-user. Any generated delete helper must click ' Yes, Delete' (leading space) inside a container exposed as role=document, not role=dialog.",
+    "CORRECTION to the ## Test Data / Constraints assumption about needing utils/setup-data.ts: no such file exists in this repo, and no API-created employee precondition is needed. The Employee Name field is a live autocomplete — typing a single character 'a' returned 5 hint options — so the test resolves an existing employee at runtime and links to it. If this demo instance were ever reset to zero employees this scenario would need a real precondition, but that is not the observed state. FLAGGED for the generator: do not import utils/setup-data.ts; it does not exist.",
+    "Priority Hint applied largely as written: critical for list/search/add, major for delete. Judgment was applied in two places. (a) Delete was kept at major per the hint even though it is destructive, because create/view is the blocking path and delete has a confirmation gate in front of it. (b) The three validation/empty-state scenarios were rated major rather than critical: each is a commonly-hit error path with confirmed exact text, but none blocks the primary task. No override of the hint was needed.",
+    "SUSPECTED PRODUCT BUG, asserted as observed: on an empty Save, Confirm Password shows 'Passwords do not match' instead of 'Required' while the other five fields all show 'Required'. This is recorded deliberately so test-healer does not 'correct' the assertion to 'Required' and so a real future fix shows up as an intentional, reviewable test failure rather than a mystery.",
+    "Locator risk, and the single most likely cause of first-run failures: four of the six Add User inputs (Username, Password, Confirm Password) and the list's Username filter input have NO accessible name, no label association and no placeholder, so getByRole('textbox', { name: ... }) cannot be used for them. The two icon-only row action buttons likewise have empty accessible names. Both dropdowns are custom widgets (a div trigger, options as role=option in a role=listbox), not <select>, so selectOption() will not work. Page objects will need label-relative / row-scoped locators. This deviates from the CLAUDE.md getByRole preference out of necessity, not preference — getByRole IS usable for the options, buttons ('Search', 'Reset', 'Save', 'Cancel', / Add/, /Yes, Delete/) and the 'System Users' heading.",
+    "Record counts are unusable as assertions on this instance: the total moved from '(46) Records Found' to '(51) Records Found' within the exploration session purely from other people's activity, and the count text switches between singular 'Record Found' and plural 'Records Found'. Filtered counts scoped to a test's own generated username ARE safe. Also note pagination ('Pagination Navigation') appears once the unfiltered set exceeds the 50-per-page limit, so an unfiltered scan for a specific user is unreliable — always search.",
+    "These scenarios all require an authenticated Admin session and should use the ui project's existing shared storageState (playwright/.auth/admin.json via the 'setup' project). Unlike the login plan, NO storageState override is needed here.",
+    "Test-data placeholders {{randomUsername}} and {{randomStrongPassword}} do not exist in utils/test-data.ts yet (it currently exports only randomToken, randomBogusUsername, randomBogusPassword). {{randomBogusUsername}} exists and is reused for the empty-state search. The generator will need to add the two new generators, honouring the confirmed live constraints: username >= 5 characters ('Should be at least 5 characters') and password >= 7 characters ('Should have at least 7 characters'); 'Zz9!qaPlan' was accepted and rated 'Strong'."
+  ],
+  "outOfScope": [
+    "The entire API layer of System Users — no api-type scenarios. Carried over verbatim in intent from the requirements file's ## Out of Scope and confirmed against the repo: .env holds only BASE_URL, ADMIN_USERNAME, ADMIN_PASSWORD and API_BASE_URL, with no OAUTH_CLIENT_ID/OAUTH_CLIENT_SECRET, and per CLAUDE.md the v2 REST API needs a one-time manual OAuth client registration (Admin > Configuration > Register OAuth Client) that only a human can perform. For the record, exploration DID reveal the real endpoints behind this page — GET /web/index.php/api/v2/admin/users (with limit/offset/username/userRoleId/status/sortField/sortOrder), POST /web/index.php/api/v2/admin/users, DELETE /web/index.php/api/v2/admin/users, GET /web/index.php/api/v2/admin/validation/user-name?userName= — but these were observed via cookie-session calls from the browser and are NOT planned as api scenarios. Revisit only after the OAuth credentials exist in .env.",
+    "Editing an existing user's role or status — excluded by the requirements file. The edit (pencil) action button was observed as the second icon button in each row's Actions cell but was never clicked.",
+    "Password reset and any credential-related behavior for system users, including actually logging in as a newly created user to prove the credentials work — excluded by the requirements file. Note this leaves a real gap: the add scenario proves the record was created, not that the account can authenticate.",
+    "Bulk delete via the row/header multi-select checkboxes — excluded by the requirements file unless trivially safe, and it is NOT: the select-all checkbox in the header would target every visible record on a shared instance holding 50+ accounts belonging to other people, and the requirements file explicitly forbids deleting pre-existing data. Deliberately never clicked during exploration.",
+    "Column sorting via the sort icons on each column header (present on Username, User Role, Employee Name, Status; the list defaults to sortField=u.userName&sortOrder=ASC) — observed but not exercised; Minor.",
+    "Field-level format/boundary validation beyond required and uniqueness — confirmed live but Minor and not requested: Username under 5 characters shows 'Should be at least 5 characters'; Password under 7 characters shows 'Should have at least 7 characters'; the password strength meter renders 'Very Weak' through 'Strong'. Strings are recorded here so a later deeper-coverage round does not need to re-explore.",
+    "Whether the Username filter is an exact or a partial/LIKE match — not determined live, so the search scenario asserts a 'contains' invariant plus the presence of an exactly-matching row instead of an exact result count.",
+    "Filtering by the Employee Name autocomplete on the list page, and the Reset button's behavior — both controls were exercised incidentally during exploration but neither is named in any acceptance criterion; Minor.",
+    "Pagination behavior once the unfiltered list exceeds 50 records — a 'Pagination Navigation' element was observed appearing when the count reached 51, but paging is not in any acceptance criterion and its presence depends on other users' data volume, which would make it flaky.",
+    "The informational toast that accompanies an empty result ('Info' / 'No Records Found') and the success toast after a save — both auto-dismiss quickly and the save toast could not be captured at all during exploration, so toast text is deliberately not asserted anywhere in this plan.",
+    "Linking one employee to multiple system users. The employee picked at runtime already had another user account and the create still succeeded, so no uniqueness rule appears to exist there — but this was incidental, not verified, and is not an acceptance criterion.",
+    "Any check of what an ESS-role user can or cannot see after being created (role enforcement / authorization) — a separate concern from managing the user records themselves."
+  ],
+  "residualDataNote": "CLEAN — nothing left behind. Exploration created exactly one system user, 'zz_qa_plan_7k3m9' (ESS / Enabled, linked to the pre-existing employee shown as 'A8DCo 010Z'), and deleted it in the same session via the row delete action + 'Yes, Delete'. Deletion was verified twice: an exact-username search returned 'No Records Found', and a follow-up prefix search for 'zz_qa_plan' also returned 'No Records Found', so no earlier stray users share that prefix. No pre-existing or seeded user was deleted, edited, or selected for deletion at any point — the multi-select checkboxes were never touched. No employee records were created (the employee linked to was pre-existing and was not modified). The browser session was closed at the end of exploration. Ambient caveat unrelated to this session: the unfiltered record count rose from 46 to 51 during the ~5 minutes of exploration due to other users of this public demo instance, so the generator and healer should expect other people's residue (e.g. many 'jmeter.auto.*', 'Test User_*', 'User<uuid>' accounts) and must never assert absolute counts or delete anything they did not create."
+}

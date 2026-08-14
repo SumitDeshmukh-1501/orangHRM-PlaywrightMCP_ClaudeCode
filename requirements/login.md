@@ -33,6 +33,12 @@ critical
   correctness.
 - Account lockout after repeated failed attempts — edge case, not
   confirmed to exist on this demo instance.
+  - API-level login testing — OrangeHRM doesn't expose a documented REST
+  "login" endpoint. Its public v2 API uses OAuth 2.0 (client_id/secret →
+  bearer token), which is a different mechanism entirely from the web
+  login form. The internal call the login page itself makes is
+  undocumented, UI-only, and not a stable target for API testing. This
+  feature is `type: ui` only — no `api` scenarios will be planned for it.
 
 ## Notes
 This is everything I can reasonably assume without opening the live site —

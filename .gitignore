@@ -11,6 +11,10 @@ playwright-report/
 blob-report/
 playwright/.cache/
 
+# Saved authenticated browser session written by tests/ui/auth.setup.ts.
+# This is a credential artifact (it contains a live session cookie) — never commit it.
+playwright/.auth/
+
 # Build output (if any is ever added)
 dist/
 build/
