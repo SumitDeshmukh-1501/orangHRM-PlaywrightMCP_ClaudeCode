@@ -1,0 +1,35 @@
+{
+  "name": "orangehrm-test-automation",
+  "version": "1.0.0",
+  "description": "AI-assisted UI + API test automation for OrangeHRM demo site using Playwright, TypeScript, and Claude Code subagents.",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --project=ui",
+    "test:api": "playwright test --project=api",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:sanity": "playwright test --grep @sanity",
+    "test:functional": "playwright test --grep @functional",
+    "test:e2e": "playwright test --grep @e2e",
+    "test:integration": "playwright test --grep @integration",
+    "test:regression": "playwright test --grep @regression",
+    "test:ui:smoke": "playwright test --project=ui --grep @smoke",
+    "test:ui:sanity": "playwright test --project=ui --grep @sanity",
+    "test:ui:regression": "playwright test --project=ui --grep @regression",
+    "test:api:smoke": "playwright test --project=api --grep @smoke",
+    "test:api:sanity": "playwright test --project=api --grep @sanity",
+    "test:api:regression": "playwright test --project=api --grep @regression",
+    "test:headed": "playwright test --project=ui --headed",
+    "test:debug": "playwright test --project=ui --debug",
+    "report": "playwright show-report reports/html",
+    "codegen": "playwright codegen https://opensource-demo.orangehrmlive.com/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0",
+    "dotenv": "^17.4.2"
+  }
+}
